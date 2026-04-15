@@ -60,4 +60,44 @@ test.describe("Auth API", () => {
     expect(body.accessToken).toBeTruthy();
     expect(body.refreshToken).toBeTruthy();
   });
+
+  test("should return 400 when password is missing", async ({ request }) => {
+    const response = await request.post(`${BASE_URL}/login`, {
+      data: {
+        username: "emilys",
+        // no password
+      },
+    });
+    expect(response.status()).toBe(400);
+  });
+
+  test("should return 401 when credentials are invalid", async ({
+    request,
+  }) => {
+    const response = await request.post(`${BASE_URL}/login`, {
+      data: {
+        username: "emilys",
+        password: "wrongpassword",
+      },
+    });
+    expect(response.status()).toBe(400);
+  });
+
+  test("should return 401 when accessing protected route without token", async ({
+    request,
+  }) => {
+    const response = await request.get(`${BASE_URL}/me`);
+    expect(response.status()).toBe(401);
+  });
+
+  test("should return 401 when refresh token is invalid", async ({
+    request,
+  }) => {
+    const response = await request.post(`${BASE_URL}/refresh`, {
+      data: {
+        refreshToken: "invalidtoken123",
+      },
+    });
+    expect(response.status()).toBe(403);
+  });
 });
