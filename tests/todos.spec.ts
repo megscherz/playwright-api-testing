@@ -6,23 +6,26 @@ test.describe('Todos API', () => {
   test('should get all todos', async ({ request }) => {
     const response = await request.get('/todos');
     expect(response.status()).toBe(200);
-    const posts = await response.json();
-    expect(posts[0]).toHaveProperty('id');
-    expect(posts[0]).toHaveProperty('title');
-    expect(posts[0]).toHaveProperty('completed');
-    expect(posts[0]).toHaveProperty('userId');
-    expect(posts.length).toBe(200);
+    const todos = await response.json();
+    expect(todos.length).toBe(200);
+    expect(todos[0]).toMatchObject({
+      id: expect.any(Number),
+      title: expect.any(String),
+      completed: expect.any(Boolean),
+      userId: expect.any(Number),
+    });
   });
 
   test('should get a single todo', async ({ request }) => {
     const response = await request.get('/todos/1');
     expect(response.status()).toBe(200);
-    const post = await response.json();
-    expect(post).toHaveProperty('id');
-    expect(post.id).toBe(1);
-    expect(post).toHaveProperty('title');
-    expect(post).toHaveProperty('completed');
-    expect(post).toHaveProperty('userId');
+    const todo = await response.json();
+    expect(todo.id).toBe(1);
+    expect(todo).toMatchObject({
+      title: expect.any(String),
+      completed: expect.any(Boolean),
+      userId: expect.any(Number),
+    });
   });
 
   test('should return 404 for a todo that does not exist', async ({ request }) => {
@@ -30,16 +33,24 @@ test.describe('Todos API', () => {
     expect(response.status()).toBe(404);
   });
 
+  test('should filter todos by completion status using query params', async ({ request }) => {
+    const response = await request.get('/todos?completed=true');
+    expect(response.status()).toBe(200);
+    const todos = await response.json();
+    expect(todos.length).toBeGreaterThan(0);
+    expect(todos.every((todo: { completed: boolean }) => todo.completed === true)).toBe(true);
+  })
+
   test('should create a new todo', async ({ request }) => {
     const response = await request.post('/todos', {
         data: testTodo
     });
     
     expect(response.status()).toBe(201);
-    const post = await response.json();
-    expect(post.title).toBe(testTodo.title);
-    expect(post.completed).toBe(testTodo.completed);
-    expect(post.userId).toBe(testTodo.userId);
+    const todo = await response.json();
+    expect(todo.title).toBe(testTodo.title);
+    expect(todo.completed).toBe(testTodo.completed);
+    expect(todo.userId).toBe(testTodo.userId);
   });
 
    test('should update an existing todo', async ({ request }) => {
@@ -48,10 +59,10 @@ test.describe('Todos API', () => {
     });
     
     expect(response.status()).toBe(200);
-    const post = await response.json();
-    expect(post.title).toBe(updatedTodo.title);
-    expect(post.completed).toBe(updatedTodo.completed);
-    expect(post.userId).toBe(updatedTodo.userId);
+    const todo = await response.json();
+    expect(todo.title).toBe(updatedTodo.title);
+    expect(todo.completed).toBe(updatedTodo.completed);
+    expect(todo.userId).toBe(updatedTodo.userId);
   });
 
   test('should delete a todo', async ({ request }) => {

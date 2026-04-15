@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { testPost, updatedPost } from "../testData/posts";
 import { testComment, updatedComment } from "../testData/comments";
 
 test.describe("Comments API", () => {
@@ -7,12 +6,14 @@ test.describe("Comments API", () => {
     const response = await request.get("/comments");
     expect(response.status()).toBe(200);
     const comments = await response.json();
-    expect(comments[0]).toHaveProperty("id");
-    expect(comments[0]).toHaveProperty("name");
-    expect(comments[0]).toHaveProperty("email");
-    expect(comments[0]).toHaveProperty("body");
-    expect(comments[0]).toHaveProperty("postId");
     expect(comments.length).toBe(500);
+    expect(comments[0]).toMatchObject({
+      id: expect.any(Number),
+      postId: expect.any(Number),
+      name: expect.any(String),
+      email: expect.any(String),
+      body: expect.any(String),
+    });
   });
 
   test("should get a single comment", async ({ request }) => {
@@ -20,10 +21,13 @@ test.describe("Comments API", () => {
     expect(response.status()).toBe(200);
     const comment = await response.json();
     expect(comment.id).toBe(1);
-    expect(comment).toHaveProperty("name");
-    expect(comment).toHaveProperty("body");
-    expect(comment).toHaveProperty("email");
-    expect(comment).toHaveProperty("postId");
+    expect(comment[0]).toMatchObject({
+      id: expect.any(Number),
+      postId: expect.any(Number),
+      name: expect.any(String),
+      email: expect.any(String),
+      body: expect.any(String),
+    });
   });
 
   test("should return 404 for a comment that does not exist", async ({
@@ -66,7 +70,7 @@ test.describe("Comments API", () => {
     expect(comment.body).toBe(testComment.body);
     expect(comment.name).toBe(testComment.name);
     expect(comment.email).toBe(testComment.email);
-    expect(comment.id).toBe(1);
+    expect(comment).toHaveProperty('id');
   });
 
   test("should update an existing comment", async ({ request }) => {

@@ -9,3 +9,7 @@ export const updatedPost = {
   body: "I am updating the body of the post",
   userId: 1,
 };
+
+export const patchedPost = {
+  title: "My Patched Post 3",
+}
