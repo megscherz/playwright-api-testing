@@ -37,9 +37,9 @@ test.describe('Todos API', () => {
     
     expect(response.status()).toBe(201);
     const post = await response.json();
-    expect(post.title).toBe('My Test Todo');
-    expect(post.completed).toBe(false);
-    expect(post.userId).toBe(1);
+    expect(post.title).toBe(testTodo.title);
+    expect(post.completed).toBe(testTodo.completed);
+    expect(post.userId).toBe(testTodo.userId);
   });
 
    test('should update an existing todo', async ({ request }) => {
@@ -49,9 +49,9 @@ test.describe('Todos API', () => {
     
     expect(response.status()).toBe(200);
     const post = await response.json();
-    expect(post.title).toBe('My Test Todo 2');
-    expect(post.completed).toBe(true);
-    expect(post.userId).toBe(1);
+    expect(post.title).toBe(updatedTodo.title);
+    expect(post.completed).toBe(updatedTodo.completed);
+    expect(post.userId).toBe(updatedTodo.userId);
   });
 
   test('should delete a todo', async ({ request }) => {

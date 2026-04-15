@@ -37,9 +37,9 @@ test.describe('Posts API', () => {
     
     expect(response.status()).toBe(201);
     const post = await response.json();
-    expect(post.title).toBe('My Test Post');
-    expect(post.body).toBe('This is the body of my test post');
-    expect(post.userId).toBe(1);
+    expect(post.title).toBe(testPost.title);
+    expect(post.body).toBe(testPost.body);
+    expect(post.userId).toBe(testPost.userId);
   });
 
    test('should update an existing post', async ({ request }) => {
@@ -49,9 +49,9 @@ test.describe('Posts API', () => {
     
     expect(response.status()).toBe(200);
     const post = await response.json();
-    expect(post.title).toBe('My Test Post 2');
-    expect(post.body).toBe('I am updating the body of the post');
-    expect(post.userId).toBe(1);
+    expect(post.title).toBe(updatedPost.title);
+    expect(post.body).toBe(updatedPost.body);
+    expect(post.userId).toBe(updatedPost.userId);
   });
 
   test('should delete a post', async ({ request }) => {
