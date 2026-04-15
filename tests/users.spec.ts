@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { testUser, updatedUser } from "../testData/users";
 
 test.describe("Users API", () => {
   test("should get all users", async ({ request }) => {
@@ -65,28 +66,7 @@ test.describe("Users API", () => {
 
   test("should create a new user", async ({ request }) => {
     const response = await request.post("/users", {
-      data: {
-        name: "John Doe",
-        username: "johndoe",
-        email: "johndoe@example.com",
-        address: {
-          street: "123 Main St",
-          suite: "Apt 1",
-          city: "Chicago",
-          zipcode: "60601",
-          geo: {
-            lat: "41.8781",
-            lng: "-87.6298",
-          },
-        },
-        phone: "1-800-555-5555",
-        website: "johndoe.com",
-        company: {
-          name: "John Doe Inc",
-          catchPhrase: "Making things happen",
-          bs: "synergize scalable supply-chains",
-        },
-      },
+      data: testUser
     });
 
     const user = await response.json();
@@ -105,28 +85,7 @@ test.describe("Users API", () => {
 
   test("should update an existing user", async ({ request }) => {
     const response = await request.put("/users/1", {
-      data: {
-        name: "Jane Doe",
-        username: "janedoe",
-        email: "janedoe@example.com",
-        address: {
-          street: "456 Elm St",
-          suite: "Apt 2",
-          city: "Chicago",
-          zipcode: "60602",
-          geo: {
-            lat: "41.8781",
-            lng: "-87.6298",
-          },
-        },
-        phone: "1-800-555-1234",
-        website: "janedoe.com",
-        company: {
-          name: "Jane Doe Inc",
-          catchPhrase: "Getting things done",
-          bs: "leverage agile frameworks",
-        },
-      },
+      data: updatedUser
     });
 
     expect(response.status()).toBe(200);

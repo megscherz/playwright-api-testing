@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { testTodo, updatedTodo } from '../testData/todos';
 
 test.describe('Todos API', () => {
 
@@ -31,11 +32,7 @@ test.describe('Todos API', () => {
 
   test('should create a new todo', async ({ request }) => {
     const response = await request.post('/todos', {
-        data: {
-        title: 'My Test Todo',
-        completed: false,
-        userId: 1,
-        }
+        data: testTodo
     });
     
     expect(response.status()).toBe(201);
@@ -47,11 +44,7 @@ test.describe('Todos API', () => {
 
    test('should update an existing todo', async ({ request }) => {
     const response = await request.put('/todos/1', {
-        data: {
-        title: 'My Test Todo 2',
-        completed: true,
-        userId: 1,
-        }
+        data: updatedTodo
     });
     
     expect(response.status()).toBe(200);

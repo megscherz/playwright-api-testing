@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { testPost, updatedPost } from '../testData/posts';
 
 test.describe('Posts API', () => {
 
@@ -31,11 +32,7 @@ test.describe('Posts API', () => {
 
   test('should create a new post', async ({ request }) => {
     const response = await request.post('/posts', {
-        data: {
-        title: 'My Test Post',
-        body: 'This is the body of my test post',
-        userId: 1,
-        }
+        data: testPost
     });
     
     expect(response.status()).toBe(201);
@@ -47,11 +44,7 @@ test.describe('Posts API', () => {
 
    test('should update an existing post', async ({ request }) => {
     const response = await request.put('/posts/1', {
-        data: {
-        title: 'My Test Post 2',
-        body: 'I am updating the body of the post',
-        userId: 1,
-        }
+        data: updatedPost
     });
     
     expect(response.status()).toBe(200);
