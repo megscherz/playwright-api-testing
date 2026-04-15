@@ -32,6 +32,16 @@ test.describe('Posts API', () => {
     expect(response.status()).toBe(404);
   });
 
+  test('should get all posts from a single user', async ({ request }) => {
+    const response = await request.get('/posts?userId=1');
+    expect(response.status()).toBe(200);
+    const posts = await response.json();
+    expect(posts.length).toBeGreaterThan(0);
+    expect(
+      posts.every((post: { userId: number }) => post.userId === 1),
+    ).toBe(true);
+  })
+
   test('should create a new post', async ({ request }) => {
     const response = await request.post('/posts', {
         data: testPost

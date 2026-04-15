@@ -69,6 +69,15 @@ test.describe("Users API", () => {
     expect(response.status()).toBe(404);
   });
 
+  test("should return empty array for userId that has no posts", async ({
+    request,
+  }) => {
+    const response = await request.get("/posts?userId=999");
+    expect(response.status()).toBe(200);
+    const posts = await response.json();
+    expect(posts.length).toBe(0);
+  });
+
   test("should create a new user", async ({ request }) => {
     const response = await request.post("/users", {
       data: testUser,
